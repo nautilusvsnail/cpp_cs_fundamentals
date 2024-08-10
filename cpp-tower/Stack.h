@@ -15,7 +15,7 @@ class Stack {
   public:
     void push_back(const Cube & cube);
     Cube removeTop();
-    Cube & peekTop();
+    const Cube & peekTop();
     unsigned size() const;
 
     // An overloaded operator<<, allowing us to print the stack via `cout<<`:

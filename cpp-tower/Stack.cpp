@@ -31,7 +31,7 @@ Cube Stack::removeTop() {
   return cube;
 }
 
-Cube & Stack::peekTop() {
+const Cube & Stack::peekTop() {
   return cubes_[cubes_.size() - 1];
 }
 

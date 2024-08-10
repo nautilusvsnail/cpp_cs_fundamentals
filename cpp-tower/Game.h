@@ -12,7 +12,7 @@
 
 class Game {
   public:
-    Game();
+    Game(int);
     void solve();
 
     // An overloaded operator<<, allowing us to print the stack via `cout<<`:
@@ -20,4 +20,6 @@ class Game {
 
   private:
     std::vector<Stack> stacks_;
+    int num_stacks_;
+    const unsigned NUM_CUBES_ = 4;
 };

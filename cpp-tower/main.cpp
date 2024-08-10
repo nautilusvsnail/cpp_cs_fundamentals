@@ -9,7 +9,7 @@
 #include <iostream>
 
 int main() {
-  Game g;
+  Game g(3);
 
   std::cout << "Initial game state: " << std::endl;
   std::cout << g << std::endl;
