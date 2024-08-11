@@ -94,20 +94,29 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  *
  * The hue of every pixel is set to the a hue value of either orange or
  * blue, based on if the pixel's hue value is closer to orange than blue.
- *
+ * 
+ * "Illini Orange" has a hue of 11.
+ * "Illini Blue" has a hue of 216.
+ * in between - 113.5
+ * outside - 293.5
  * @param image A PNG object which holds the image data to be modified.
  *
  * @return The illinify'd image.
 **/
 PNG illinify(PNG image) {
+  const double ORANGE_LOW = 113.5;
+  const double ORANGE_HIGH = 293.5;
+  const double ILL_ORANGE = 216;
+  const double ILL_BLUE = 11;
+
   for (unsigned x = 0; x < image.width(); x++) {
     for (unsigned y = 0; y < image.height(); y++) {
       HSLAPixel & pixel = image.getPixel(x, y);
-
-      // `pixel` is a reference to the memory stored inside of the PNG `image`,
-      // which means you're changing the image directly. No need to `set`
-      // the pixel since you're directly changing the memory of the image.
-      pixel.s = 0;
+      if (ORANGE_LOW <= pixel.h && pixel.h < ORANGE_HIGH) {
+        pixel.h = ILL_ORANGE;
+      } else {
+        pixel.h = ILL_BLUE;
+      }
     }
   }
   return image;
@@ -127,6 +136,14 @@ PNG illinify(PNG image) {
 * @return The watermarked image.
 */
 PNG watermark(PNG firstImage, PNG secondImage) {
-
+  for (unsigned x = 0; x < firstImage.width(); x++) {
+    for (unsigned y = 0; y < firstImage.height(); y++) {
+      HSLAPixel & base_pixel = firstImage.getPixel(x, y);
+      HSLAPixel & mark_pixel = secondImage.getPixel(x, y);
+      if (mark_pixel.l == 1) {
+        base_pixel.l += .2;
+      }
+    }
+  }
   return firstImage;
 }
