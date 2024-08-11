@@ -11,14 +11,19 @@
 
 Write your name and email address in the comment space here:
 
-Name:
-Email:
+Name: Sullivan Madewell
+Email: sullymadewell@gmail.com
 
 (...end multi-line comment.)
 ******************** */
 
 using uiuc::PNG;
 using uiuc::HSLAPixel;
+
+// distance utility
+double dist(double a, double b){
+  return std::sqrt(std::pow(a,2) + std::pow(b,2));
+}
 
 /**
  * Returns an image that has been transformed to grayscale.
@@ -67,9 +72,20 @@ PNG grayscale(PNG image) {
  * @return The image with a spotlight.
  */
 PNG createSpotlight(PNG image, int centerX, int centerY) {
-
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
+      int x_offset = static_cast<int>(x) - centerX;
+      int y_offset = static_cast<int>(y) - centerY;
+      double radius = dist(x_offset, y_offset);
+      if (radius > 160) {
+        pixel.l = pixel.l * .2;
+      } else {
+        pixel.l = pixel.l * (1 - (0.005 * radius));
+      }
+    }
+  }
   return image;
-  
 }
  
 
@@ -84,7 +100,16 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  * @return The illinify'd image.
 **/
 PNG illinify(PNG image) {
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
 
+      // `pixel` is a reference to the memory stored inside of the PNG `image`,
+      // which means you're changing the image directly. No need to `set`
+      // the pixel since you're directly changing the memory of the image.
+      pixel.s = 0;
+    }
+  }
   return image;
 }
  

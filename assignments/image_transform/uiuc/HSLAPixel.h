@@ -11,9 +11,14 @@
 #include <sstream>
 
 namespace uiuc {
-
-  // Put your HSLAPixel class definition here.
-  // (Remember to end it with a semicolon!)
-
-
+  /*
+  h, storing the hue of the pixel in degrees between 0 and 360 using a double
+  s, storing the saturation of the pixel as a decimal value between 0.0 and 1.0 using a double
+  l, storing the luminance of the pixel as a decimal value between 0.0 and 1.0 using a double
+  a, storing the alpha channel (blending opacity) as a decimal value between 0.0 and 1.0 using a double
+  */
+  class HSLAPixel {
+    public:
+    double h, s, l, a;
+  };
 }
