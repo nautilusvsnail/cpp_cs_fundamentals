@@ -81,6 +81,83 @@
 template <typename T>
 void LinkedList<T>::insertOrdered(const T& newData) {
 
+  // allocate a new node
+  Node* newNode = new Node(newData);
+  Node* currentNode = head_;
+
+  if (!head_) {
+    // If empty, insert as the only item as both head and tail.
+    // The Node already has next and prev set to nullptr by default.
+    // std::cout << "List empty, inserting " << newNode->data << " as only value" << std::endl;
+    head_ = newNode;
+    tail_ = newNode;
+    // std::cout << *this << std::endl;
+    
+  }
+  else if (newNode->data <= head_->data) {
+    // insert newNode at head
+    Node* highNode = head_;
+    // std::cout << "Inserting " << newNode->data << " at head" << std::endl;
+
+    // set head_ to newNode
+    head_ = newNode;
+
+    // set newNode next (prev stays null)
+    newNode->next = highNode;
+
+    // set highNode prev to newNode
+    highNode->prev = newNode;
+    
+    // std::cout << *this << std::endl;
+
+  } else if (newNode->data > tail_->data) {
+    // insert newNode at tail
+    Node* lowNode = tail_;
+    // std::cout << "Inserting " << newNode->data << " at tail" << std::endl;
+
+    // set lowNode next to newNode
+    lowNode->next = newNode;
+
+    // set newNode prev (next stays null)
+    newNode->prev = lowNode;
+
+    // set tail to newNode
+    tail_ = newNode;
+
+    // std::cout << *this << std::endl;
+  } else {
+    // iterate through nodes
+    // determine where to stick the new node
+
+    while (currentNode != tail_) {
+      currentNode = currentNode->next;
+
+      if (newNode->data <= currentNode->data) {
+        // insert node
+        Node* highNode = currentNode;
+        Node* lowNode  = currentNode->prev;
+        // std::cout << "Inserting " << newNode->data << " between " << lowNode->data << " and " << highNode->data << std::endl;
+
+        // set lowNode next to newNode
+        lowNode->next = newNode;
+
+        // set newNode prev and next
+        newNode->prev = lowNode;
+        newNode->next = highNode;
+
+        // set highNode prev to newNode
+        highNode->prev = newNode;
+
+        // std::cout << *this << std::endl;
+        break;
+      }
+    }
+  }
+
+  // update size
+  size_++;
+
+
   // -----------------------------------------------------------
   // TODO: Your code here!
   // -----------------------------------------------------------
@@ -245,6 +322,23 @@ LinkedList<T> LinkedList<T>::merge(const LinkedList<T>& other) const {
   //    very slow.
 
   // -----------------------------------------------------------
+
+
+  while (!left.empty() || !right.empty()) {
+    if (left.empty()) {
+      merged.pushBack(right.head_->data);
+      right.popFront();
+    } else if (right.empty()) {
+      merged.pushBack(left.head_->data);
+      left.popFront();
+    } else if (right.head_->data < left.head_->data) {
+      merged.pushBack(right.head_->data);
+      right.popFront();
+    } else {
+      merged.pushBack(left.head_->data);
+      left.popFront();
+    }
+  }
 
   // We return the merged list by value here. It may be copied out of the
   // function, but usually the compiler will optimize this to automatically
