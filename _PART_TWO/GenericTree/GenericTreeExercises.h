@@ -95,8 +95,19 @@ static void treeFactory(GenericTree<int>& tree) {
   // Edit the function body only. You should leave the function header alone.
   // Build the contents of tree so that it matches the diagram above
   // when you print it out. The main() function runs that test for you.
+  GenericTree<int>::TreeNode* currentNode;
 
-  // ...
+  int treeVals[6] = {4, 8, 15, 16, 23, 42};
+
+  tree.clear();
+  tree.createRoot(treeVals[0]);
+  tree.getRootPtr()->addChild(treeVals[1]);
+  tree.getRootPtr()->addChild(treeVals[2]);
+  tree.getRootPtr()->childrenPtrs[0]->addChild(treeVals[3]);
+  tree.getRootPtr()->childrenPtrs[0]->addChild(treeVals[4]);
+  tree.getRootPtr()->childrenPtrs[0]->childrenPtrs[0]->addChild(treeVals[5]);
+
+
 
 }
 
@@ -324,7 +335,33 @@ std::vector<T> traverseLevels(GenericTree<T>& tree) {
   // Remember that you can add a copy of an item to the back of a std::vector
   // with the .push_back() member function.
 
-  // ...
+   // queue of node pointers that we still need to explore (constructed empty)
+  std::queue<TreeNode*> nodesToExplore;
+
+  // Begin by pushing our subtree root pointer onto the stack
+  nodesToExplore.push(tree.getRootPtr());
+
+  // Loop while there are still nodes to explore
+  while (!nodesToExplore.empty()) {
+
+    // Make a copy of the top pointer on the queue, then pop it to decrease the stack
+    TreeNode* topNode = nodesToExplore.front();
+    nodesToExplore.pop();
+
+    if (!topNode) {
+      // If the top node pointer is null, then we must not dereference it.
+      continue;
+    }
+
+    // If the node exists, it may have children pointers. Let's iterate
+    // through the childrenPtrs vector and push copies of those pointers
+    // onto the exploration stack.
+    for (auto childPtr : topNode->childrenPtrs) {
+      nodesToExplore.push(childPtr);
+    }
+
+    results.push_back(topNode->data);
+  }
 
   return results;
 }
